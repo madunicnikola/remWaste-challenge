@@ -1,27 +1,28 @@
-"use client"
-import { useRef, useEffect, useState } from "react"
-import FeatureBadge from "./FeatureBadge"
-import { Truck, ShieldCheck, Scale } from "lucide-react" 
-import Image from "next/image"
+"use client";
+import { useRef, useEffect, useState } from "react";
+import FeatureBadge from "./FeatureBadge";
+import { Truck, ShieldCheck, Scale } from "lucide-react";
+import Image from "next/image";
 
-export default function SkipCard({ skip, selected, onSelect }: { skip: any, selected: boolean, onSelect: () => void }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const priceRef = useRef<HTMLSpanElement>(null)
+export default function SkipCard({ skip, selected, onSelect, disabled }: { skip: any, selected: boolean, onSelect: () => void, disabled?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLSpanElement>(null);
   
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.matchMedia('(hover: none)').matches || window.innerWidth < 768)
+      setIsMobile(window.matchMedia('(hover: none)').matches || window.innerWidth < 768);
     }
     
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (ref.current) {
@@ -32,12 +33,20 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
         )
       })
     }
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (disabled && isHovered) {
+      handleMouseLeave();
+    }
+  }, [disabled]);
 
   const handleMouseEnter = async () => {
-    if (selected) return
-    const gsap = await import("gsap")
-    const { gsap: gsapInstance } = gsap
+    if (isMobile || disabled || selected) return;
+    
+    setIsHovered(true);
+    const gsap = await import("gsap");
+    const { gsap: gsapInstance } = gsap;
 
     gsapInstance.to(ref.current, {
       y: -8,
@@ -46,7 +55,7 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
       ease: "power2.out"
     })
 
-    const img = imageRef.current?.querySelector('img')
+    const img = imageRef.current?.querySelector('img');
     if (img) {
       gsapInstance.to(img, {
         scale: 1.1,
@@ -60,26 +69,28 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
       y: -4,
       duration: 0.3,
       ease: "power2.out"
-    })
+    });
 
     gsapInstance.to(priceRef.current, {
       scale: 1.1,
       color: "#f0abfc",
       duration: 0.3,
       ease: "power2.out"
-    })
+    });
 
     gsapInstance.to(ref.current, {
       boxShadow: "0 20px 40px -12px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(59, 130, 246, 0.3)",
       duration: 0.3,
       ease: "power2.out"
-    })
+    });
   }
 
   const handleMouseLeave = async () => {
-    if (selected) return
-    const gsap = await import("gsap")
-    const { gsap: gsapInstance } = gsap
+    if (isMobile) return;
+    
+    setIsHovered(false);
+    const gsap = await import("gsap");
+    const { gsap: gsapInstance } = gsap;
 
     gsapInstance.to(ref.current, {
       y: 0,
@@ -87,7 +98,7 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
       boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
       duration: 0.3,
       ease: "power2.out"
-    })
+    });
 
     const img = imageRef.current?.querySelector('img')
     if (img) {
@@ -103,14 +114,14 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
       y: 0,
       duration: 0.3,
       ease: "power2.out"
-    })
+    });
 
     gsapInstance.to(priceRef.current, {
       scale: 1,
       color: "#f0abfc",
       duration: 0.3,
       ease: "power2.out"
-    })
+    });
   }
 
   return (
@@ -119,7 +130,8 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
       onClick={onSelect}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative w-full max-w-xs sm:max-w-sm lg:max-w-md h-auto lg:h-[340px] flex flex-col bg-white/10 border border-zinc-700 rounded-2xl shadow-xl overflow-hidden cursor-pointer select-none transition-all duration-300 ${selected ? "ring-4 ring-fuchsia-500 scale-105" : ""}`}
+      className={`relative w-full max-w-xs sm:max-w-sm lg:max-w-md h-auto lg:h-[340px] flex flex-col bg-white/10 border border-zinc-700 rounded-2xl shadow-xl overflow-hidden cursor-pointer select-none transition-all duration-300 
+        ${selected ? "ring-4 ring-fuchsia-500 scale-105" : ""} ${disabled ? "pointer-events-none opacity-50" : ""}`}
       style={{ backdropFilter: "blur(10px)" }}
     >
       <div ref={imageRef} className="relative w-full h-40 overflow-hidden">
@@ -160,21 +172,25 @@ export default function SkipCard({ skip, selected, onSelect }: { skip: any, sele
              style={{boxShadow: "0 0 0 8px rgba(236,72,153,0.18)"}} />
       )}
       
-      <div className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-           style={{
-             background: "linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)",
-             transform: "translateX(-100%)",
-             animation: "shine 2s ease-in-out infinite"
-           }}>
-      </div>
+      {!isMobile && (
+        <div className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+             style={{
+               background: "linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)",
+               transform: "translateX(-100%)",
+               animation: "shine 2s ease-in-out infinite"
+             }}>
+        </div>
+      )}
 
-      <style jsx>{`
-        @keyframes shine {
-          0% { transform: translateX(-100%); }
-          50% { transform: translateX(100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
+      <style jsx>
+        {`
+          @keyframes shine {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+          }
+        `}
+      </style>
     </div>
-  )
+  );
 }

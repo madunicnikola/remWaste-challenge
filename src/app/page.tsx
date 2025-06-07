@@ -42,7 +42,6 @@ export default function Home() {
     return <PageLoader />;
   }
 
-
   const handleClearSelection = () => {
     setSelectedSkipId(null)
   }
@@ -55,7 +54,13 @@ export default function Home() {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-zinc-100 tracking-tight drop-shadow-xl">Choose Your Skip Size</h1>
           <p className="text-zinc-400 mt-2 text-sm sm:text-base lg:text-lg">Select the skip size that best suits your needs</p>
         </div>
-        <SkipGrid skips={skips} selectedSkipId={selectedSkipId} onSelect={setSelectedSkipId} isLoading={isLoading} />
+        <SkipGrid 
+          skips={skips} 
+          selectedSkipId={selectedSkipId} 
+          onSelect={setSelectedSkipId} 
+          isLoading={isLoading} 
+          disabled={!!selectedSkip} 
+        />
       </div>
       <BottomBar selectedSkip={selectedSkip} onContinue={() => {}} onClearSelection={handleClearSelection} />
     </div>

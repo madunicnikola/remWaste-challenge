@@ -1,12 +1,12 @@
-import SkipCard from "./SkipCard"
-import SkeletonSkipCard from "./SkeletonSkipCard"
+import SkipCard from "./SkipCard";
+import SkeletonSkipCard from "./SkeletonSkipCard";
 
-export default function SkipGrid({ skips, selectedSkipId, onSelect, isLoading }: { skips: any[], selectedSkipId: number | null, onSelect: (id: number) => void, isLoading: boolean }) {
-  const displayItems = isLoading ? Array(4).fill(null) : skips
+export default function SkipGrid({ skips, selectedSkipId, onSelect, isLoading, disabled }: { skips: any[], selectedSkipId: number | null, onSelect: (id: number) => void, isLoading: boolean, disabled?: boolean }) {
+  const displayItems = isLoading ? Array(4).fill(null) : skips;
   
-  const rows = []
+  const rows = [];
   for (let i = 0; i < displayItems.length; i += 3) {
-    rows.push(displayItems.slice(i, i + 3))
+    rows.push(displayItems.slice(i, i + 3));
   }
 
   return (
@@ -17,7 +17,13 @@ export default function SkipGrid({ skips, selectedSkipId, onSelect, isLoading }:
             isLoading ? (
               <SkeletonSkipCard key={`skeleton-${index}`} />
             ) : (
-              <SkipCard key={skip.id} skip={skip} selected={selectedSkipId === skip.id} onSelect={() => onSelect(skip.id)} />
+              <SkipCard 
+                key={skip.id} 
+                skip={skip} 
+                selected={selectedSkipId === skip.id} 
+                onSelect={() => onSelect(skip.id)} 
+                disabled={disabled}
+              />
             )
           ))}
         </div>
@@ -31,7 +37,13 @@ export default function SkipGrid({ skips, selectedSkipId, onSelect, isLoading }:
                 isLoading ? (
                   <SkeletonSkipCard key={`skeleton-${rowIdx}-${index}`} />
                 ) : (
-                  <SkipCard key={skip.id} skip={skip} selected={selectedSkipId === skip.id} onSelect={() => onSelect(skip.id)} />
+                  <SkipCard 
+                    key={skip.id} 
+                    skip={skip} 
+                    selected={selectedSkipId === skip.id} 
+                    onSelect={() => onSelect(skip.id)} 
+                    disabled={disabled}
+                  />
                 )
               ))}
             </div>
