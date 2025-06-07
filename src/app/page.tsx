@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import ProgressBar from "./components/ProgressBar"
 import SkipGrid from "./components/SkipGrid"
-import BottomBar from "./components/BottomBar"
+import BottomBar from "./components/CardDrawer"
 import PageLoader from "./components/PageLoader"
 
 export default function Home() {
