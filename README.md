@@ -47,3 +47,10 @@ yarn dev
 pnpm install
 pnpm dev
 ```
+
+## Project Showcase Display
+
+![Desktop View](docs/images/demo-desktop.png)
+![Desktop Drawer View](docs/images/demo-desktop-drawer.png)
+![Mobile View](docs/images/demo-mobile.png)
+![Mobile Drawer View](docs/images/demo-mobile-drawer.png)
