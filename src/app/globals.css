@@ -120,3 +120,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+body, * {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #18181b;
+}
+
+body::-webkit-scrollbar, *::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+body::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 8px;
+  border: 2px solid #18181b;
+  min-height: 40px;
+  transition: background 0.2s;
+}
+
+body::-webkit-scrollbar-thumb:hover, *::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+body::-webkit-scrollbar-track, *::-webkit-scrollbar-track {
+  background: transparent;
+}
